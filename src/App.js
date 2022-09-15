@@ -2,7 +2,7 @@ import Calendar from "./core/Calendar";
 import './App.css';
 
 function App() {
-  return <Calendar />
+  return <Calendar useShortWeekDays/>
 }
 
 export default App;

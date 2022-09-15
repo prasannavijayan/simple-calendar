@@ -1,4 +1,5 @@
-import { MONTHS, WEEKDAYS } from "./constants";
+import React from "react";
+import { MONTHS, WEEKDAYS, WEEKDAYS_SHORT } from "./constants";
 
 // Date :: Prototype
 Date.prototype.monthDays = function() {
@@ -7,37 +8,45 @@ Date.prototype.monthDays = function() {
 };
 
 // generateCalendar
-const generateCalendar = (date) => {
+const generateCalendar = (date, useShortWeekDays = false) => {
     const details = {
         // totalDays: monthDays(d.getMonth(), d.getFullYear()),
         totalDays: date.monthDays(),
-        weekDays: WEEKDAYS,
+        weekDays: useShortWeekDays ? WEEKDAYS_SHORT : WEEKDAYS,
         months: MONTHS
     };
 
     var start = new Date(date.getFullYear(), date.getMonth()).getDay();
-    var cal = [];
     var day = 1;
-    for (var i = 0; i <= 6; i++) {
-        cal.push(['<tr>']);
-        for (var j = 0; j < 7; j++) {
-            if (i === 0) {
-                cal[i].push('<td>' + details.weekDays[j] + '</td>');
-            } else if (day > details.totalDays) {
-                cal[i].push('<td>&nbsp;</td>');
+
+    const getCalendarDays = (i, j) => {
+        let dayHTML = <></>;
+        if (i == 0) {
+            dayHTML = <th>{details.weekDays[j]}</th>;
+        } else if (day > details.totalDays) {
+            dayHTML = <td></td>;
+        } else {
+            if (i === 1 && j < start) {
+                dayHTML = <td></td>
             } else {
-                if (i === 1 && j < start) {
-                    cal[i].push('<td>&nbsp;</td>');
-                } else {
-                    cal[i].push('<td class="day">' + day++ + '</td>');
-                }
+                dayHTML = <td className="day">{day++}</td>
             }
         }
-        cal[i].push('</tr>');
-    }
-    cal = cal.reduce((a, b) => a.concat(b), []).join('');
+    
+        return dayHTML;
+    };
 
-    return cal;
+    return <tbody>
+        {[...Array(7)].map((x, i) => (
+            <tr key={i+2}>
+                {[...Array(7)].map((y, j) => {
+                    return <React.Fragment key={j+10}>
+                        {getCalendarDays(i, j)}
+                    </React.Fragment>
+                })}
+            </tr>   
+        ))}
+    </tbody>
 }
 
 

@@ -2,10 +2,18 @@ import React, { useState } from "react";
 import { generateCalendar } from "./utils";
 import { MONTHS } from "./constants";
 
-const Calendar = () => {
+const Calendar = (props) => {
+
+    const _generateCalendar = (_current) => {
+        return generateCalendar(
+            _current,
+            props.useShortWeekDays
+        );
+    }
+
     // Current Date
     const [currentDate, setCurrentDate] = useState(new Date());
-    const [calendarUI, setCalendarUI] = useState(generateCalendar(currentDate));
+    const [calendarUI, setCalendarUI] = useState(_generateCalendar(currentDate));
 
     const month = MONTHS[currentDate.getMonth()];
     const year = currentDate.getFullYear();
@@ -15,11 +23,11 @@ const Calendar = () => {
         if (date.getMonth() === 0) {
             date = new Date(date.getFullYear() - 1, 11);
             setCurrentDate(date);
-            setCalendarUI(generateCalendar(date));
+            setCalendarUI(_generateCalendar(date));
         } else {
             date = new Date(date.getFullYear(), date.getMonth() - 1)
             setCurrentDate(date);
-            setCalendarUI(generateCalendar(date));
+            setCalendarUI(_generateCalendar(date));
         }
     }
 
@@ -28,11 +36,11 @@ const Calendar = () => {
         if (date.getMonth() === 11) {
             date = new Date(date.getFullYear() + 1, 0);
             setCurrentDate(date);
-            setCalendarUI(generateCalendar(date));
+            setCalendarUI(_generateCalendar(date));
         } else {
             date = new Date(date.getFullYear(), date.getMonth() + 1)
             setCurrentDate(date);
-            setCalendarUI(generateCalendar(date));
+            setCalendarUI(_generateCalendar(date));
         }
     }
 
@@ -48,10 +56,9 @@ const Calendar = () => {
         </div>
         <div className="row">
             <div>
-                <table
-                    className="sc-table"
-                    dangerouslySetInnerHTML={{ __html: calendarUI }}
-                />
+                <table className="sc-table">
+                    {calendarUI}
+                </table>
             </div>
         </div>
     </div>
