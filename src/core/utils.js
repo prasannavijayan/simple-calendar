@@ -10,7 +10,6 @@ Date.prototype.monthDays = function() {
 // generateCalendar
 const generateCalendar = (date, useShortWeekDays = false) => {
     const details = {
-        // totalDays: monthDays(d.getMonth(), d.getFullYear()),
         totalDays: date.monthDays(),
         weekDays: useShortWeekDays ? WEEKDAYS_SHORT : WEEKDAYS,
         months: MONTHS
